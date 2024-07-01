@@ -11,9 +11,9 @@ import lombok.EqualsAndHashCode;
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
     @Column(unique = true, length = 100)
-    String name;
+    private String name;
     @Column(length = 50)
-    String category;
+    private String category;
 }

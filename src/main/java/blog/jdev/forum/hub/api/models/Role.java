@@ -14,9 +14,9 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT")
-    Integer id;
+    private Integer id;
     @Column(nullable = false, length = 5, unique = true)
-    String name;
+    private String name;
     @ManyToMany(mappedBy = "roles")
-    Set<User> users;
+    private Set<User> users;
 }
