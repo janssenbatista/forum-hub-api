@@ -14,11 +14,14 @@ import java.time.LocalDateTime;
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @Column(nullable = false)
-    String message;
+    private String message;
     @Column(columnDefinition = "TINYINT")
-    Integer solution;
+    private Integer solution;
     @CreationTimestamp
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User author;
 }

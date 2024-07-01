@@ -13,17 +13,19 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @Column(nullable = false, length = 50)
-    String name;
+    private String name;
     @Column(nullable = false, unique = true)
-    String email;
+    private String email;
     @Column(nullable = false, length = 60)
-    String password;
+    private String password;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "tb_users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    Set<Role> roles;
+    private Set<Role> roles;
+    @OneToMany(mappedBy = "author")
+    private Set<Answer> answers;
 
 }
