@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS tb_answers(
+    id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    message VARCHAR(255) NOT NULL,
+    solution TINYINT DEFAULT 0,
+    created_at TIMESTAMP
+)
