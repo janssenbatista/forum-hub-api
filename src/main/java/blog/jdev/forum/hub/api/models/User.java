@@ -27,5 +27,7 @@ public class User {
     private Set<Role> roles;
     @OneToMany(mappedBy = "author")
     private Set<Answer> answers;
+    @OneToMany(mappedBy = "user")
+    private Set<Topic> topics;
 
 }

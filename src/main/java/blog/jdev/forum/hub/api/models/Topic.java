@@ -31,4 +31,7 @@ public class Topic {
     private TopicStatus status;
     @OneToMany(mappedBy = "topic", fetch = FetchType.EAGER)
     private Set<Answer> answers = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
