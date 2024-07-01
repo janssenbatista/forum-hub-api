@@ -24,4 +24,7 @@ public class Answer {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User author;
+    @ManyToOne
+    @JoinColumn(name = "topic_id")
+    private Topic topic;
 }

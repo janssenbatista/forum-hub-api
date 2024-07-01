@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "topic")
@@ -27,4 +29,6 @@ public class Topic {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private TopicStatus status;
+    @OneToMany(mappedBy = "topic", fetch = FetchType.EAGER)
+    private Set<Answer> answers = new HashSet<>();
 }
