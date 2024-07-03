@@ -25,6 +25,7 @@ dependencies {
 	implementation("org.flywaydb:flyway-mysql")
 	implementation("com.auth0:java-jwt:4.4.0")
 	compileOnly("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
 	runtimeOnly("com.mysql:mysql-connector-j")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
