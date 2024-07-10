@@ -30,6 +30,7 @@ public class SecurityConfiguration {
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(httpRequest -> {
                     httpRequest.requestMatchers(HttpMethod.POST, "/login").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
                             .requestMatchers(HttpMethod.POST, "/topics").hasAnyRole("USER")
                             .anyRequest().denyAll();
                 });
