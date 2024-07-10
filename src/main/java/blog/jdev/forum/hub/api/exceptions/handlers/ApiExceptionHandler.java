@@ -27,8 +27,8 @@ public class ApiExceptionHandler {
         if (ex instanceof ValidationException validationException) {
             return ResponseEntity.badRequest().body(validationException.getMessage());
         }
-        if (ex instanceof ForbiddenException) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        if (ex instanceof ForbiddenException forbiddenException) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(forbiddenException.getMessage());
         }
         return ResponseEntity.internalServerError().build();
     }

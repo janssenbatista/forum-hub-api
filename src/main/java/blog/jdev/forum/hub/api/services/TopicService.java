@@ -1,5 +1,6 @@
 package blog.jdev.forum.hub.api.services;
 
+import blog.jdev.forum.hub.api.controllers.dtos.TopicListResponseDTO;
 import blog.jdev.forum.hub.api.controllers.dtos.TopicRequestDTO;
 import blog.jdev.forum.hub.api.controllers.dtos.TopicResponseDTO;
 import blog.jdev.forum.hub.api.exceptions.BadRequestException;
@@ -11,6 +12,8 @@ import blog.jdev.forum.hub.api.models.TopicStatus;
 import blog.jdev.forum.hub.api.repositories.CourseRepository;
 import blog.jdev.forum.hub.api.repositories.TopicRepository;
 import blog.jdev.forum.hub.api.repositories.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -39,11 +42,18 @@ public class TopicService {
         var user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new BadRequestException("user not found"));
         // ADMIN USERS CANNOT CREATE A TOPIC
         if (user.getRoles().stream().map(Role::getName).toList().contains("ADMIN")) {
-            throw new ForbiddenException();
+            throw new ForbiddenException("");
         }
         var course = courseRepository.findById(dto.courseId()).orElseThrow(() -> new BadRequestException("course not found"));
         var newTopic = new Topic(UUID.randomUUID(), dto.title(), dto.message(), LocalDateTime.now(), TopicStatus.NOT_ANSWERED, new HashSet<>(), user, course);
         var topic = topicRepository.save(newTopic);
         return topic.toTopicResponseDTO();
+    }
+
+    public Page<TopicListResponseDTO> getAllTopics(Pageable pageable, String courseName) {
+        if (!courseName.isBlank()) {
+            return topicRepository.findAllByCourseName(pageable, courseName).map(Topic::toTopicListResponseDTO);
+        }
+        return topicRepository.findAll(pageable).map(Topic::toTopicListResponseDTO);
     }
 }
