@@ -1,5 +1,6 @@
 package blog.jdev.forum.hub.api.models;
 
+import blog.jdev.forum.hub.api.controllers.dtos.TopicResponseDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class Topic {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "BINARY(16)")
     private UUID id;
     @Column(unique = true, nullable = false, length = 70)
     private String title;
@@ -29,7 +31,7 @@ public class Topic {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private TopicStatus status;
-    @OneToMany(mappedBy = "topic", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "topic")
     private Set<Answer> answers = new HashSet<>();
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -37,4 +39,8 @@ public class Topic {
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
+
+    public TopicResponseDTO toTopicResponseDTO() {
+        return new TopicResponseDTO(this.getId(), this.getTitle(), this.getMessage(), this.getCreatedAt());
+    }
 }

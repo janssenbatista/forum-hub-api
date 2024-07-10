@@ -10,19 +10,28 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
+
+    private final AuthFilter authFilter;
+
+    public SecurityConfiguration(AuthFilter authFilter) {
+        this.authFilter = authFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(httpRequest -> {
                     httpRequest.requestMatchers(HttpMethod.POST, "/login").permitAll()
-                            .anyRequest().authenticated();
+                            .requestMatchers(HttpMethod.POST, "/topics").hasAnyRole("USER")
+                            .anyRequest().denyAll();
                 });
         return http.build();
     }

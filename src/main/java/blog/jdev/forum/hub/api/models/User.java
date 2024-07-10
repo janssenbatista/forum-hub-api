@@ -1,10 +1,7 @@
 package blog.jdev.forum.hub.api.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,14 +31,14 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private final Set<Role> roles = new HashSet<>();
-    @OneToMany(mappedBy = "author")
-    private Set<Answer> answers;
-    @OneToMany(mappedBy = "user")
-    private Set<Topic> topics;
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+    private Set<Answer> answers = new HashSet<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<Topic> topics = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_%s".formatted(role.getName()))).toList();
+        return getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_%s".formatted(role.getName()))).toList();
     }
 
     @Override

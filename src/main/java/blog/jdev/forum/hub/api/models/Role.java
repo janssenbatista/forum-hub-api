@@ -1,9 +1,10 @@
 package blog.jdev.forum.hub.api.models;
 
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity(name = "profile")
 @Table(name = "tb_roles")
@@ -16,9 +17,6 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT")
     private Integer id;
-    @Getter
     @Column(nullable = false, length = 5, unique = true)
     private String name;
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
 }
