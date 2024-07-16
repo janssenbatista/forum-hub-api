@@ -14,7 +14,6 @@ import blog.jdev.forum.hub.api.repositories.CourseRepository;
 import blog.jdev.forum.hub.api.repositories.TopicRepository;
 import blog.jdev.forum.hub.api.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -72,5 +71,14 @@ public class TopicService {
         }
         BeanUtils.copyProperties(dto, topic);
         return topicRepository.save(topic).toTopicResponseDTO();
+    }
+
+    public void deleteTopic(UUID id, Authentication authentication) {
+        var topic = topicRepository.findById(id).orElseThrow(() -> new BadRequestException("topic not found"));
+        var user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new ForbiddenException(""));
+        if (!user.getRoles().stream().map(Role::getName).toList().contains("ADMIN") && !topic.getUser().equals(user)) {
+            throw new ForbiddenException("");
+        }
+        topicRepository.deleteById(id);
     }
 }

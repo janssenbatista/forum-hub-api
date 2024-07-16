@@ -47,4 +47,10 @@ public class TopicController {
     public ResponseEntity<TopicResponseDTO> updateTopic(@RequestBody UpdateTopicRequestDTO dto, @PathVariable UUID id, Authentication authentication) {
         return ResponseEntity.ok(topicService.updateTopic(dto, id, authentication));
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteTopic(@PathVariable UUID id, Authentication authentication) {
+        topicService.deleteTopic(id, authentication);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

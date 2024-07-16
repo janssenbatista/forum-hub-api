@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                             .requestMatchers(HttpMethod.POST, "/topics").hasAnyRole("USER")
                             .requestMatchers(HttpMethod.GET, "/topics/**").authenticated()
                             .requestMatchers(HttpMethod.PUT, "/topics/**").authenticated()
+                            .requestMatchers(HttpMethod.DELETE, "/topics/**").authenticated()
                             .anyRequest().denyAll();
                 });
         return http.build();
