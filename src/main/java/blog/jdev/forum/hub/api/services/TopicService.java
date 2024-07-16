@@ -69,6 +69,10 @@ public class TopicService {
         if (!topic.getUser().equals(user)) {
             throw new ForbiddenException("");
         }
+        var topicExists = topicRepository.findByTitleAndMessage(dto.title(), dto.message());
+        if (topicExists.isPresent() && !topicExists.get().getId().equals(topic.getId())) {
+            throw new BadRequestException("topic already exists");
+        }
         BeanUtils.copyProperties(dto, topic);
         return topicRepository.save(topic).toTopicResponseDTO();
     }
