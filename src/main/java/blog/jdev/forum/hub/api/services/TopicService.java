@@ -3,6 +3,7 @@ package blog.jdev.forum.hub.api.services;
 import blog.jdev.forum.hub.api.controllers.dtos.TopicDetailResponseDTO;
 import blog.jdev.forum.hub.api.controllers.dtos.TopicRequestDTO;
 import blog.jdev.forum.hub.api.controllers.dtos.TopicResponseDTO;
+import blog.jdev.forum.hub.api.controllers.dtos.UpdateTopicRequestDTO;
 import blog.jdev.forum.hub.api.exceptions.BadRequestException;
 import blog.jdev.forum.hub.api.exceptions.ConflictException;
 import blog.jdev.forum.hub.api.exceptions.ForbiddenException;
@@ -12,6 +13,8 @@ import blog.jdev.forum.hub.api.models.TopicStatus;
 import blog.jdev.forum.hub.api.repositories.CourseRepository;
 import blog.jdev.forum.hub.api.repositories.TopicRepository;
 import blog.jdev.forum.hub.api.repositories.UserRepository;
+import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -59,5 +62,15 @@ public class TopicService {
 
     public TopicDetailResponseDTO getTopicById(UUID id) {
         return topicRepository.findById(id).orElseThrow(() -> new BadRequestException("topic not found")).toTopicDetailResponseDTO();
+    }
+
+    public TopicResponseDTO updateTopic(UpdateTopicRequestDTO dto, UUID id, Authentication authentication) {
+        var topic = topicRepository.findById(id).orElseThrow(() -> new BadRequestException("topic not found"));
+        var user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new ForbiddenException(""));
+        if (!topic.getUser().equals(user)) {
+            throw new ForbiddenException("");
+        }
+        BeanUtils.copyProperties(dto, topic);
+        return topicRepository.save(topic).toTopicResponseDTO();
     }
 }

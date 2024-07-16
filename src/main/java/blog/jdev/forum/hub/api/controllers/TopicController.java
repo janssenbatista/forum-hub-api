@@ -3,6 +3,7 @@ package blog.jdev.forum.hub.api.controllers;
 import blog.jdev.forum.hub.api.controllers.dtos.TopicDetailResponseDTO;
 import blog.jdev.forum.hub.api.controllers.dtos.TopicRequestDTO;
 import blog.jdev.forum.hub.api.controllers.dtos.TopicResponseDTO;
+import blog.jdev.forum.hub.api.controllers.dtos.UpdateTopicRequestDTO;
 import blog.jdev.forum.hub.api.services.TopicService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -40,5 +41,10 @@ public class TopicController {
     @GetMapping("{id}")
     public ResponseEntity<TopicDetailResponseDTO> getTopicById(@PathVariable UUID id) {
         return ResponseEntity.ok(topicService.getTopicById(id));
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<TopicResponseDTO> updateTopic(@RequestBody UpdateTopicRequestDTO dto, @PathVariable UUID id, Authentication authentication) {
+        return ResponseEntity.ok(topicService.updateTopic(dto, id, authentication));
     }
 }
