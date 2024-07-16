@@ -1,6 +1,6 @@
 package blog.jdev.forum.hub.api.services;
 
-import blog.jdev.forum.hub.api.controllers.dtos.TopicListResponseDTO;
+import blog.jdev.forum.hub.api.controllers.dtos.TopicDetailResponseDTO;
 import blog.jdev.forum.hub.api.controllers.dtos.TopicRequestDTO;
 import blog.jdev.forum.hub.api.controllers.dtos.TopicResponseDTO;
 import blog.jdev.forum.hub.api.exceptions.BadRequestException;
@@ -50,10 +50,14 @@ public class TopicService {
         return topic.toTopicResponseDTO();
     }
 
-    public Page<TopicListResponseDTO> getAllTopics(Pageable pageable, String courseName) {
+    public Page<TopicDetailResponseDTO> getAllTopics(Pageable pageable, String courseName) {
         if (!courseName.isBlank()) {
-            return topicRepository.findAllByCourseName(pageable, courseName).map(Topic::toTopicListResponseDTO);
+            return topicRepository.findAllByCourseName(pageable, courseName).map(Topic::toTopicDetailResponseDTO);
         }
-        return topicRepository.findAll(pageable).map(Topic::toTopicListResponseDTO);
+        return topicRepository.findAll(pageable).map(Topic::toTopicDetailResponseDTO);
+    }
+
+    public TopicDetailResponseDTO getTopicById(UUID id) {
+        return topicRepository.findById(id).orElseThrow(() -> new BadRequestException("topic not found")).toTopicDetailResponseDTO();
     }
 }

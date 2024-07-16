@@ -32,7 +32,7 @@ public class SecurityConfiguration {
                     httpRequest.requestMatchers(HttpMethod.POST, "/login").permitAll()
                             .requestMatchers(HttpMethod.GET, "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
                             .requestMatchers(HttpMethod.POST, "/topics").hasAnyRole("USER")
-                            .requestMatchers(HttpMethod.GET, "/topics").authenticated()
+                            .requestMatchers(HttpMethod.GET, "/topics/**").authenticated()
                             .anyRequest().denyAll();
                 });
         return http.build();

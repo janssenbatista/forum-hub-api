@@ -1,6 +1,6 @@
 package blog.jdev.forum.hub.api.models;
 
-import blog.jdev.forum.hub.api.controllers.dtos.TopicListResponseDTO;
+import blog.jdev.forum.hub.api.controllers.dtos.TopicDetailResponseDTO;
 import blog.jdev.forum.hub.api.controllers.dtos.TopicResponseDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -45,7 +45,7 @@ public class Topic {
         return new TopicResponseDTO(this.getId(), this.getTitle(), this.getMessage(), this.getCreatedAt());
     }
 
-    public TopicListResponseDTO toTopicListResponseDTO() {
-        return new TopicListResponseDTO(this.getId(), this.getTitle(), this.getMessage(), this.getCreatedAt(), this.getStatus(), this.getUser().getName(), this.getCourse().getName());
+    public TopicDetailResponseDTO toTopicDetailResponseDTO() {
+        return new TopicDetailResponseDTO(this.getId(), this.getTitle(), this.getMessage(), this.getCreatedAt(), this.getStatus(), this.getUser().getName(), this.getCourse().getName());
     }
 }

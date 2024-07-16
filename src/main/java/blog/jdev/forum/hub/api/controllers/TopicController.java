@@ -1,11 +1,10 @@
 package blog.jdev.forum.hub.api.controllers;
 
-import blog.jdev.forum.hub.api.controllers.dtos.TopicListResponseDTO;
+import blog.jdev.forum.hub.api.controllers.dtos.TopicDetailResponseDTO;
 import blog.jdev.forum.hub.api.controllers.dtos.TopicRequestDTO;
 import blog.jdev.forum.hub.api.controllers.dtos.TopicResponseDTO;
 import blog.jdev.forum.hub.api.services.TopicService;
 import jakarta.validation.Valid;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -14,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("topics")
@@ -32,9 +31,14 @@ public class TopicController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<TopicListResponseDTO>> getAllTopics(@RequestParam(defaultValue = "0") int pageNumber,
-                                                                   @RequestParam(defaultValue = "10") int pageSize,
-                                                                   @RequestParam(required = false, defaultValue = "") String courseName) {
+    public ResponseEntity<Page<TopicDetailResponseDTO>> getAllTopics(@RequestParam(defaultValue = "0") int pageNumber,
+                                                                     @RequestParam(defaultValue = "10") int pageSize,
+                                                                     @RequestParam(required = false, defaultValue = "") String courseName) {
         return ResponseEntity.ok(topicService.getAllTopics(PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.ASC, "createdAt")), courseName));
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<TopicDetailResponseDTO> getTopicById(@PathVariable UUID id) {
+        return ResponseEntity.ok(topicService.getTopicById(id));
     }
 }
